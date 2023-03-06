@@ -1,39 +1,35 @@
-const mongoose = require('mongoose') //imports mongoose
-const autoIncrement = require('mongoose-sequence')(mongoose) //imports auto-increment
+const mongoose = require('mongoose')
+const AutoIncrement = require('mongoose-sequence')(mongoose)
 
 const noteSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      require: true,
+      required: true,
       ref: 'User',
     },
     title: {
       type: String,
-      require: true,
+      required: true,
     },
-    text: [
-      {
-        type: String,
-        require: true,
-      },
-    ],
-    completed: [
-      {
-        type: Boolean,
-        default: true,
-      },
-    ],
+    text: {
+      type: String,
+      required: true,
+    },
+    completed: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
-    timestamps: true, //adds createdAt and updatedAt
+    timestamps: true,
   },
 )
 
-noteSchema.plugin(autoIncrement, {
+noteSchema.plugin(AutoIncrement, {
   inc_field: 'ticket',
   id: 'ticketNums',
-  start_seq: 500, //starts at 500
-}) //adds auto-increment to the noteId field
+  start_seq: 500,
+})
 
-module.exports = mongoose.model('User', noteSchema) //exports the model
+module.exports = mongoose.model('Note', noteSchema)
